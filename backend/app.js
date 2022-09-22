@@ -4,7 +4,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 
 const app = express();
-const dotenv = require("dotenv");
+const dotenv = require('dotenv');
 dotenv.config();
 
 /* connect to MongoDB*/
@@ -13,16 +13,6 @@ mongoose.connect(`mongodb+srv://${process.env.DB_LOGIN}:${process.env.DB_PASSWOR
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
   .catch(() => console.log('Connexion à MongoDB échouée !'));
-
-app.use((req, res, next) => {
-  res.status(201);
-  next();
-});
-
-app.use((req, res, next) => {
-  res.json({ message: 'Votre requête a bien été reçue !' });
-  next();
-});
 
 
 module.exports = app;
