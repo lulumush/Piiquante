@@ -27,6 +27,24 @@ exports.getOneSauce = (req, res, next) => {
     .catch(error => { res.status(400).json( { error })})
 };
 
+//delete one sauce in particular
+exports.deleteSauce = (req, res, next) => {
+    Sauce.deleteOne({_id: req.params.id}).then(
+      () => {
+        res.status(200).json({
+          message: 'Deleted!'
+        });
+      }
+    ).catch(
+      (error) => {
+        res.status(400).json({
+          error: error
+        });
+      }
+    );
+  };
+
+
 // Get all the sauces in DB
 exports.getAllSauce = (req, res, next) => {
     Sauce.find().then(
