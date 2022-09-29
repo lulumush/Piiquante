@@ -4,7 +4,7 @@ exports.createSauce = (req, res, next) => {
     //console.log(req.body);
     const sauceObject = JSON.parse(req.body.sauce);
     delete sauceObject._id;
-    delete sauceObject._userId;
+    //delete sauceObject._userId;
     const sauce = new Sauce({
         ...sauceObject,
         userId: req.auth.userId,
@@ -20,6 +20,12 @@ exports.createSauce = (req, res, next) => {
     .catch(error => { res.status(400).json( { error })})
 };
 
+//get one sauce in particular
+exports.getOneSauce = (req, res, next) => {
+    Sauce.findOne({ _id: req.params.id })
+    .then((sauce) => { res.status(200).json(sauce)})
+    .catch(error => { res.status(400).json( { error })})
+};
 
 // Get all the sauces in DB
 exports.getAllSauce = (req, res, next) => {
