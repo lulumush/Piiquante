@@ -12,7 +12,7 @@ const sauceSchema = mongoose.Schema({
     likes: {type: Number},
     dislikes: {type: Number},
     usersLiked: {type: [String]},
-    userDisliked: {type: [String]},
+    usersDisliked: {type: [String]},
 });
 
 //exports schema into model
