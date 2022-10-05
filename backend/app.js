@@ -1,5 +1,7 @@
 /* import Express */
 const express = require('express');
+/* import helmet*/
+const helmet = require('helmet');
 /* import Mongoose */
 const mongoose = require('mongoose');
 const bodyParser = require("body-parser");
@@ -11,7 +13,9 @@ const app = express();
 const dotenv = require('dotenv');
 dotenv.config();
 
-/* connect to MongoDB*/
+app.use(helmet());
+
+/* connect to MongoDB */
 mongoose.connect(`mongodb+srv://${process.env.DB_LOGIN}:${process.env.DB_PASSWORD}@cluster0.at0v76y.mongodb.net/?retryWrites=true&w=majority`,
   { useNewUrlParser: true,
     useUnifiedTopology: true })

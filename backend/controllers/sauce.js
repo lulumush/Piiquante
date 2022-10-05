@@ -1,4 +1,5 @@
 const Sauce = require('../models/sauce');
+const fs = require('fs');
 
 exports.createSauce = (req, res, next) => {
     //console.log(req.body);
@@ -16,7 +17,7 @@ exports.createSauce = (req, res, next) => {
     });
 
     sauce.save()
-    .then(() => { res.status(201).json({message: 'Sauce enregistré avec succès!'})})
+    .then(() => { res.status(201).json({message: 'Sauce enregistrée avec succès!'})})
     .catch(error => { res.status(400).json( { error })})
 };
 
@@ -52,20 +53,24 @@ exports.modifySauce = (req, res, next) => {
 
 //delete one sauce in particular
 exports.deleteSauce = (req, res, next) => {
-    Sauce.deleteOne({_id: req.params.id}).then(
-      () => {
-        res.status(200).json({
-          message: 'Sauce supprimée avec succès!'
+  Sauce.findOne({ _id: req.params.id})
+    .then(sauce => {
+      if (sauce.userId != req.auth.userId) {
+        res.status(401).json({message: 'Non autorisé(e)'});
+      } 
+      else {
+        const filename = sauce.imageUrl.split('/images/')[1];
+        fs.unlink(`images/${filename}`, () => {
+        Sauce.deleteOne({_id: req.params.id})
+          .then(() => { res.status(200).json({message: 'Sauce supprimée avec succès!'})})
+          .catch(error => res.status(401).json({ error }));
         });
       }
-    ).catch(
-      (error) => {
-        res.status(400).json({
-          error: error
-        });
-      }
-    );
-  };
+    })
+    .catch( error => {
+      res.status(500).json({ error });
+    });
+};
 
 
 // Get all the sauces
@@ -89,22 +94,27 @@ exports.rateSauce = (req, res, next) => {
   .then((sauce) => { 
     //console.log(req.body.like);
     //console.log(sauce.usersLiked.indexOf(req.body.userId));
+
+    //if user wants to give a thumbs up
     if (req.body.like == 1 && sauce.usersLiked.indexOf(req.body.userId) == -1){
       sauce.likes++;
       sauce.usersLiked.push(req.body.userId);
       sauce.save();          
     }
+    //if user wants to give a thumbs down
     if (req.body.like == -1 && sauce.usersDisliked.indexOf(req.body.userId) == -1){
       sauce.dislikes++;
       sauce.usersDisliked.push(req.body.userId);
       sauce.save();          
     }
+    //if user wants to cancel their thumbs up
     if (req.body.like == 0 ){
       if (sauce.usersLiked.indexOf(req.body.userId) != -1){
         sauce.likes--;
         sauce.usersLiked.splice(sauce.usersLiked.indexOf(req.body.userId));
         sauce.save();
       }
+      //if user wants to cancel their thumbs down
       else if (sauce.usersDisliked.indexOf(req.body.userId) != -1){
         sauce.dislikes--;
         sauce.usersDisliked.splice(sauce.usersDisliked.indexOf(req.body.userId));
