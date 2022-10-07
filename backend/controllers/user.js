@@ -1,10 +1,10 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
-const Password = require('../models/Password');
+const userPassword = require('../middleware/password');
 
 exports.signup = (req, res, next) => {
-    if (Password.validate(req.body.password)){
+    if (userPassword.validate(req.body.password)){
         bcrypt.hash(req.body.password, 10)
             .then(hash => {
                 const user = new User({
