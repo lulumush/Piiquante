@@ -2,23 +2,26 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
 const userPassword = require('../middleware/password');
+const userEmail = require('email-validator');
 
 exports.signup = (req, res, next) => {
-    if (userPassword.validate(req.body.password)){
-        bcrypt.hash(req.body.password, 10)
-            .then(hash => {
-                const user = new User({
-                    email: req.body.email,
-                    password: hash
-                });
-                user.save()
-                .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
-                .catch(error => res.status(400).json({ error }));
-            })
-            .catch(error => res.status(500).json({ error }));
-    }
+    if (userEmail.validate(req.body.email)){
+        if (userPassword.validate(req.body.password)){
+            bcrypt.hash(req.body.password, 10)
+                .then(hash => {
+                    const user = new User({
+                        email: req.body.email,
+                        password: hash
+                    });
+                    user.save()
+                    .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
+                    .catch(error => res.status(400).json({ error }));
+                })
+                .catch(error => res.status(500).json({ error }));
+        }
+    }    
     else{
-        return res.status(401).json({ error: 'Format mot de passe incorrect !' });
+        return res.status(401).json({ error: 'Format email / mot de passe incorrect !' });
     }    
 };
 
