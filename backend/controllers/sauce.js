@@ -1,6 +1,7 @@
 const Sauce = require('../models/sauce');
 const fs = require('fs');
 
+// create and add a sauce
 exports.createSauce = (req, res, next) => {
     //console.log(req.body);
     const sauceObject = JSON.parse(req.body.sauce);
@@ -71,7 +72,6 @@ exports.deleteSauce = (req, res, next) => {
       res.status(500).json({ error });
     });
 };
-
 
 // Get all the sauces
 exports.getAllSauce = (req, res, next) => {

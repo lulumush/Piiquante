@@ -1,11 +1,13 @@
-const multer = require('multer');
+const multer = require('multer');//allow to manage incoming files
 
+//files type that are allowed
 const MIME_TYPES = {
   'image/jpg': 'jpg',
   'image/jpeg': 'jpg',
   'image/png': 'png'
 };
 
+//specify where to save incoming files
 const storage = multer.diskStorage({
   destination: (req, file, callback) => {
     callback(null, 'images');

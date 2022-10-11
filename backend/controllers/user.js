@@ -4,6 +4,7 @@ const User = require('../models/User');
 const userPassword = require('../middleware/password');
 const userEmail = require('email-validator');
 
+// create a new user with a unique email address
 exports.signup = (req, res, next) => {
     if (userEmail.validate(req.body.email)){
         if (userPassword.validate(req.body.password)){
@@ -25,6 +26,7 @@ exports.signup = (req, res, next) => {
     }    
 };
 
+//login for already existing user
 exports.login = (req, res, next) => {
     User.findOne({ email: req.body.email })
         .then(user => {
