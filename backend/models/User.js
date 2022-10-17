@@ -7,7 +7,7 @@ const userSchema = mongoose.Schema({
     password: {type: String, required: true},
 });
 
-//make sure users can't share the same email before saving into DB
+//plugin which adds pre-save validation for unique fields within a Mongoose schema
 userSchema.plugin(uniqueValidator);
 
 //exports schema into model

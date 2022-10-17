@@ -28,9 +28,9 @@ mongoose.connect(`mongodb+srv://${process.env.DB_LOGIN}:${process.env.DB_PASSWOR
 
 /* headers settings */
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+  res.setHeader('Access-Control-Allow-Origin', '*');//allow API acces from all origins
+  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');//add headers to request send to API
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');//send requests with specified methods(get, post,..)
   next();
 });
 

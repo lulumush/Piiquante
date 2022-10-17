@@ -20,6 +20,9 @@ exports.signup = (req, res, next) => {
                 })
                 .catch(error => res.status(500).json({ error }));
         }
+        else{
+            return res.status(401).json({ error: 'Format email / mot de passe incorrect !' });
+        }
     }    
     else{
         return res.status(401).json({ error: 'Format email / mot de passe incorrect !' });
@@ -41,9 +44,9 @@ exports.login = (req, res, next) => {
                     res.status(200).json({
                         userId: user._id,
                         token: jwt.sign(
-                            { userId: user._id },
-                            process.env.RANDOM_TOKEN,
-                            { expiresIn: '24h' }
+                            { userId: user._id },//datas we want to encode inside token
+                            process.env.RANDOM_TOKEN,//secret key for encoding
+                            { expiresIn: '24h' }//token expires in 24h
                         )
                     });
                 })

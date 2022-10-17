@@ -10,7 +10,7 @@ exports.createSauce = (req, res, next) => {
     const sauce = new Sauce({
         ...sauceObject,
         userId: req.auth.userId,
-        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,//generate image url
         likes: 0,
         dislikes: 0,
         usersLiked: [],
@@ -24,9 +24,9 @@ exports.createSauce = (req, res, next) => {
 
 //get one sauce in particular
 exports.getOneSauce = (req, res, next) => {
-    Sauce.findOne({ _id: req.params.id })
+    Sauce.findOne({ _id: req.params.id })//
     .then((sauce) => { res.status(200).json(sauce)})
-    .catch(error => { res.status(400).json( { error })})
+    .catch(error => { res.status(400).json( { error })})//should be res.status(404) and not (400)
 };
 
 //modify one sauce in particular
@@ -34,7 +34,7 @@ exports.modifySauce = (req, res, next) => {
   const sauceObject = req.file ? { //if req.file exist then update with new image
     ...JSON.parse(req.body.sauce),
     imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-  } : { ... req.body };
+  } : { ... req.body };//if not then take datas from request 
 
   delete sauceObject._userId;
   Sauce.findOne({_id: req.params.id})
@@ -76,7 +76,7 @@ exports.deleteSauce = (req, res, next) => {
 // Get all the sauces
 exports.getAllSauce = (req, res, next) => {
     Sauce.find().then(
-        (sauces) => {
+        (sauces) => {//array of all sauces in DB
             res.status(200).json(sauces);
         }
     ).catch(
